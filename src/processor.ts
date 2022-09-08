@@ -11,10 +11,10 @@ const processor = new SubstrateBatchProcessor()
     .setBatchSize(500)
     .setDataSource({
         // Lookup archive by the network name in the Subsquid registry
-        archive: lookupArchive("kusama", { release: "FireSquid" })
+        // archive: lookupArchive("kusama", { release: "FireSquid" })
 
         // Use archive created by archive/docker-compose.yml
-        // archive: 'http://localhost:8888/graphql'
+        archive: 'http://localhost:8888/graphql'
     })
     .addEvent('Balances.Transfer', {
         data: {event: {args: true}}
@@ -94,8 +94,10 @@ function getTransfers(ctx: Ctx): TransferEvent[] {
                 }
                 transfers.push({
                     id: item.event.id,
-                    from: ss58.codec('kusama').encode(rec.from),
-                    to: ss58.codec('kusama').encode(rec.to),
+                    // from: ss58.codec('kusama').encode(rec.from),
+                    // to: ss58.codec('kusama').encode(rec.to),
+                    from : Buffer.from(rec.from).toString('base64'),
+                    to: Buffer.from(rec.to).toString('base64'),
                     amount: rec.amount,
                     timestamp: BigInt(block.header.timestamp)
                 })
